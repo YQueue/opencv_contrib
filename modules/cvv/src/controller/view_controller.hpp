@@ -10,6 +10,7 @@
 #include <functional>
 #include <utility>
 #include <QString>
+#include <QEventLoop>
 
 #include "../util/util.hpp"
 #include "../impl/call.hpp"
@@ -302,6 +303,8 @@ class ViewController
 	void updateMode();
 
 	void hideAll();
+
+	QEventLoop eventLoop;
 };
 }
 }

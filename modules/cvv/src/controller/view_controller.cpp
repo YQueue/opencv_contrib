@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QItemSelection>
 
 #include "../gui/call_tab.hpp"
 #include "../gui/call_window.hpp"
@@ -25,6 +26,13 @@ namespace cvv
 {
 namespace controller
 {
+
+static void viewControllerRegisterMetaTypes()
+{
+    qRegisterMetaType<QItemSelection>("QItemSelection");
+}
+
+Q_CONSTRUCTOR_FUNCTION(viewControllerRegisterMetaTypes)
 
 // It's only used for instatiating a QApplication.
 // static char *emptyArray[] = {""};
@@ -109,7 +117,7 @@ void ViewController::exec()
 	updateMode();
 	if (mode == Mode::NORMAL)
 	{
-		QApplication::instance()->exec();
+		eventLoop.exec();
 	}
 }
 
@@ -194,7 +202,7 @@ void ViewController::openHelpBrowser(const QString &topic)
 
 void ViewController::resumeProgramExecution()
 {
-	QApplication::instance()->exit();
+	eventLoop.exit();
 }
 
 void ViewController::setDefaultSetting(const QString &scope, const QString &key,
@@ -339,12 +347,12 @@ void ViewController::setMode(Mode newMode)
 		break;
 	case Mode::HIDE:
 		hideAll();
-		QApplication::instance()->exit();
+		eventLoop.exit();
 		break;
 	case Mode::FAST_FORWARD:
 		if (!doesShowExitProgramButton)
 		{
-			QApplication::instance()->exit();
+			eventLoop.exit();
 		}
 		else
 		{
